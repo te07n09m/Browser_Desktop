@@ -1,0 +1,160 @@
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+nav, main {
+    height: 100%;
+    overflow: auto;
+}
+nav {
+    width: 250px;
+    max-width: 100vw;
+    display: none;
+    background-color: #f7f7f7;
+}
+.open-nav:checked + nav {
+    display: block;
+}
+main {
+    flex: 1;
+}
+
+.outer {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.shortcut-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.shortcut {
+    width: 5em;
+    overflow: hidden;
+    text-align: center;
+    margin: 0;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-size: 1em;
+    color: #3f3f3f;
+}
+.shortcut:hover {
+    filter: brightness(0.95);
+}
+.shortcut * {
+    display: inline-block;
+    margin: 0;
+    pointer-events: none;
+}
+.shortcut img {
+    width: 60%;
+    height: auto;
+    image-rendering: crisp-edges;
+}
+.shortcut p {
+    text-align: left;
+    max-width: 100%;
+    font-size: 0.8em;
+    line-height: 1em;
+    height: 2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.window-box, .contextmenu-box {
+    position: absolute;
+}
+
+.window {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: none;
+}
+
+.window-content {
+    width: 600px;
+    max-width: 100%;
+    border: 0.1em solid #7f7f7f;
+    border-radius: 2em;
+    padding: 2em;
+    background-color: #ffffff;
+}
+
+.open-window, .open-nav {
+    display: none;
+}
+
+.open-window:checked + .window {
+    display: flex;
+}
+
+.flex-left {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.search-form input {
+    width: 30em;
+    max-width: 100%;
+}
+
+.nav-shortcut {
+    font-size: 1em;
+    color: #3f3f3f;
+    padding: 0.2em;
+    border-radius: 0.5em;
+    display: block;
+}
+.nav-shortcut:hover {
+    filter: brightness(0.95);
+}
+.nav-shortcut * {
+    pointer-events: none;
+}
+.nav-shortcut p {
+    text-overflow: ellipsis;
+}
+
+.contextmenu {
+    position: absolute;
+    background-color: #f7f7f7;
+    border: 0.1em solid #efefef;
+    border-radius: 0.5em;
+    display: none;
+    font-size: 0.8em;
+}
+.contextmenu button {
+    display: block;
+    background-color: inherit;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    color: #3f3f3f;
+    width: 150px;
+    text-align: left;
+    padding: 0.2em;
+}

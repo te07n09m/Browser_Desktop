@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/desktop.css">
+    <title>デスクトップ</title>
+</head>
+<body>
+    <header>
+        <img class="icon-button" src="/res/img/menu.png" onclick="document.getElementById('open-nav').click()">
+        <img class="logo" src="/res/img/logo.png">
+    </header>
+    <div class="outer">
+        <input id="open-nav" class="open-nav" type="checkbox">
+        <nav>
+            <h2><%= user.username %></h2>
+            <a href="/auth/logout">ログアウト</a>
+            <hr>
+            <div class="nav-shortcut-box">
+                <% shortcutsAZ.forEach(shortcut => { %>
+                    <% if(shortcut) { %>
+                        <a class="nav-shortcut" href="<%= shortcut.url %>" target="_blank">
+                            <span style="display: none;"><%= JSON.stringify(shortcut) %></span>
+                            <p><%= shortcut.title %></p>
+                        </a>
+                    <% } %>
+                <% }) %>
+            </div>
+        </nav>
+        <main>
+            <% if (error_msg && error_msg.length > 0) { %>
+                <div class="error-alert"><%= error_msg[0] %></div>
+            <% } %>
+              
+            <form id="search-form" class="search-form flex-center">
+                <input name="searchword" type="text" placeholder="検索" required>
+                <button type="submit">検索</button>
+            </form>
+            <button onclick="document.getElementById('open-add-shortcut').click()">+新規作成</button>
+            <div class="shortcut-box">
+                <% shortcuts.forEach(shortcut => { %>
+                    <% if(shortcut) { %>
+                        <a class="shortcut" href="<%= shortcut.url %>" target="_blank">
+                            <span style="display: none;"><%= JSON.stringify(shortcut) %></span>
+                            <img src="<%= shortcut.faviconUrl %>"><br>
+                            <p><%= shortcut.title %></p>
+                        </a>
+                    <% } %>
+                <% }) %>
+            </div>
+        </main>
+    </div>
+
+    <div class="window-box">
+        <input id="open-add-shortcut" class="open-window" type="checkbox">
+        <div class="window">
+            <div class="window-content">
+                <h2>ショートカットを作成</h2>
+                <form action="/shortcut/add" method="post">
+                    <div>
+                        <input type="text" name="title" placeholder="タイトル">
+                    </div>
+                    <div>
+                        <input type="url" name="url" placeholder="URL" required>
+                    </div>
+                    <div class="flex-left">
+                        <button class="cancel" type="button" onclick="document.getElementById('open-add-shortcut').click()">キャンセル</button>
+                        <button type="submit">作成</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <input id="open-edit-shortcut" class="open-window" type="checkbox">
+        <div class="window">
+            <div class="window-content">
+                <h2>ショートカットを編集</h2>
+                <form id="edit-shortcut-form" method="post">
+                    <div>
+                        <input id="edit-shortcut-title" type="text" name="title" placeholder="タイトル">
+                    </div>
+                    <div>
+                        <input id="edit-shortcut-url" type="url" name="url" placeholder="URL" required>
+                    </div>
+                    <div class="flex-left">
+                        <button class="cancel" type="button" onclick="document.getElementById('open-edit-shortcut').click()">キャンセル</button>
+                        <button type="submit">更新</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="contextmenu-box">
+        <div id="shortcut-contextmenu" class="contextmenu">
+            <button onclick="document.getElementById('open-edit-shortcut').click()">編集</button>
+            <button onclick="document.getElementById('delete-shortcut').submit()">削除</button>
+        </div>
+    </div>
+
+    <div style="display: none;">
+        <span id="current-shortcut"></span>
+
+        <form id="delete-shortcut" method="post"></form>
+    </div>
+
+    <script src="/js/desktop.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+/* Reset CSS */
+
+/* ボックスモデルの統一 */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* リストのスタイルをリセット */
+ul, ol {
+    list-style: none;
+}
+
+/* リンクのデフォルトスタイルを削除 */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 画像の扱いを統一 */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* フォーム要素の標準化 */
+button, input, textarea, select {
+    font: inherit;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+/* ボタンのスタイルを統一 */
+button {
+    cursor: pointer;
+}
+
+/* テキストの基本スタイル */
+body {
+    font-family: sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* HTML5要素のデフォルトスタイルをリセット */
+article, aside, details, figcaption, figure, footer, header, main, nav, section, summary {
+    display: block;
+}
+
+
+
+/* このアプリ用設定 */
+
+html {
+    background-color: #ffffff;
+}
+
+*, *::before, *::after {
+    background-color: inherit;
+    color: #3f3f3f;
+}
+
+button {
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 1em;
+    border: 0.2em solid #57a7ff;
+    background-color: #57a7ff;
+    color: #ffffff;
+}
+button.cancel {
+    color: #57a7ff;
+    background-color: #ffffff;
+}
+button:hover {
+    filter: brightness(0.95);
+}
+button:active {
+    filter: brightness(0.9);
+}
+
+input {
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 1em;
+    border: 0.1em solid #7f7f7f;
+    width: 30em;
+    max-width: 100%;
+}
+
+img.icon-button {
+    width: 2em;
+    height: auto;
+    border-radius: 0.5em;
+}
+img.icon-button:hover {
+    filter: brightness(0.95);
+}
+img.icon-button:active {
+    filter: brightness(0.9);
+}
+
+nav, main {
+    padding: 1em;
+}
+
+header {
+    padding: 0.5em;
+    background-color: #4da1ff;
+    display: flex;
+    height: 3em;
+}
+header * {
+    height: 100%;
+    width: auto;
+}
+
+a {
+    font-size: 0.8em;
+    color: #7f7f7f;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    margin: 0.5em 0;
+}
+
+div.error-alert {
+    color: #ff4f4f;
+    background-color: #ffe5e5;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
