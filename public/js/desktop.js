@@ -1,11 +1,19 @@
+const allElements = document.querySelectorAll('*')
 const searchForm = document.getElementById('search-form')
 const shortcutContextMenu = document.getElementById('shortcut-contextmenu')
 const editShortcutForm = document.getElementById('edit-shortcut-form')
 const editShortcutTitle = document.getElementById('edit-shortcut-title')
 const editShortcutUrl = document.getElementById('edit-shortcut-url')
+const editShortcutFolder = document.getElementById('edit-shortcut-folder')
 const currentShortcut = document.getElementById('current-shortcut')
 const deleteShortcut = document.getElementById('delete-shortcut')
+const folderContextMenu = document.getElementById('folder-contextmenu')
+const editFolderForm = document.getElementById('edit-folder-form')
+const editFolderTitle = document.getElementById('edit-folder-title')
+const currentFolder = document.getElementById('current-folder')
+const deleteFolder = document.getElementById('delete-folder')
 const shortcuts = document.getElementsByClassName('shortcut')
+const folders = document.getElementsByClassName('folder')
 const navShortcuts = document.getElementsByClassName('nav-shortcut')
 
 let mouseX = 0
@@ -21,13 +29,25 @@ const showContextMenu = (contextMenu) => {
 const showShortcutContextMenu = (e, shortcut) => {
     e.preventDefault()
 
-    currentShortcut.innerHTML = shortcut.children[0].innerHTML
-    editShortcutForm.action = `/shortcut/edit/${JSON.parse(currentShortcut.innerHTML)._id}`
-    editShortcutTitle.value = JSON.parse(currentShortcut.innerHTML).title
-    editShortcutUrl.value = JSON.parse(currentShortcut.innerHTML).url
-    deleteShortcut.action = `/shortcut/delete/${JSON.parse(currentShortcut.innerHTML)._id}`
+    currentShortcut.dataset.json = shortcut.dataset.json
+    editShortcutForm.action = `/shortcut/edit/${JSON.parse(currentShortcut.dataset.json)._id}`
+    editShortcutTitle.value = JSON.parse(currentShortcut.dataset.json).title
+    editShortcutUrl.value = JSON.parse(currentShortcut.dataset.json).url
+    editShortcutFolder.value = JSON.parse(currentShortcut.dataset.json).folder
+    deleteShortcut.action = `/shortcut/delete/${JSON.parse(currentShortcut.dataset.json)._id}`
 
     showContextMenu(shortcutContextMenu)
+}
+
+const showFolderContextMenu = (e, folder) => {
+    e.preventDefault()
+
+    currentFolder.dataset.json = folder.dataset.json
+    editFolderForm.action = `/folder/edit/${JSON.parse(currentFolder.dataset.json)._id}`
+    editFolderTitle.value = JSON.parse(currentFolder.dataset.json).title
+    deleteFolder.action = `/folder/delete/${JSON.parse(currentFolder.dataset.json)._id}`
+
+    showContextMenu(folderContextMenu)
 }
 
 document.addEventListener('mousemove', (e) => {
@@ -38,6 +58,7 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('click', () => {
     setTimeout(() => {
         shortcutContextMenu.style.display = 'none'
+        folderContextMenu.style.display = 'none'
     }, 50)
 })
 
@@ -59,3 +80,13 @@ for(let shortcut of navShortcuts) {
         showShortcutContextMenu(e, shortcut)
     })
 }
+
+for(let folder of folders) {
+    folder.addEventListener('contextmenu', (e) => {
+        showFolderContextMenu(e, folder)
+    })
+}
+
+allElements.forEach(element => {
+    element.draggable = false
+})

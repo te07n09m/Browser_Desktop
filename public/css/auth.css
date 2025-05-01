@@ -16,3 +16,12 @@ main * {
 main input {
     text-align: left;
 }
+
+ul {
+    list-style: disc inside;
+}
+ul * {
+    text-align: left;
+    margin: 0 1em;
+    font-size: 0.8em;
+}

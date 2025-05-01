@@ -1,5 +1,6 @@
 const express = require('express')
 const passport = require('passport')
+const { body, validationResult } = require('express-validator')
 
 const User = require('../models/User')
 
@@ -13,7 +14,21 @@ router.get('/register', (req, res) => {
     res.render('register')
 })
 
-router.post('/register', async(req, res) => {
+router.post('/register', [
+    body('password')
+        .isLength({ min: 8 }).withMessage('パスワードは8文字以上にしてください。')
+        .matches(/[a-z]/).withMessage('小文字を含めてください。')
+        .matches(/[A-Z]/).withMessage('大文字を含めてください。')
+        .matches(/[0-9]/).withMessage('数字を含めてください。')
+], async(req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        errors.array().forEach(err => {
+            req.flash('error_msg', err.msg);
+        });
+        return res.redirect('/auth/register');
+    }
+
     const { username, password } = req.body
     try {
         await User.create({

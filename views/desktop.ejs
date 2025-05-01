@@ -25,8 +25,7 @@
             <div class="nav-shortcut-box">
                 <% shortcutsAZ.forEach(shortcut => { %>
                     <% if(shortcut) { %>
-                        <a class="nav-shortcut" href="<%= shortcut.url %>" target="_blank">
-                            <span style="display: none;"><%= JSON.stringify(shortcut) %></span>
+                        <a class="nav-shortcut" href="<%= shortcut.url %>" target="_blank" data-json="<%= JSON.stringify(shortcut) %>">
                             <p><%= shortcut.title %></p>
                         </a>
                     <% } %>
@@ -39,15 +38,23 @@
             <% } %>
               
             <form id="search-form" class="search-form flex-center">
-                <input name="searchword" type="text" placeholder="検索" required>
+                <input name="searchword" type="text" placeholder="Web検索" required>
                 <button type="submit">検索</button>
             </form>
-            <button onclick="document.getElementById('open-add-shortcut').click()">+新規作成</button>
+            <button onclick="document.getElementById('open-add-shortcut').click()">+ショートカット新規作成</button>
+            <button onclick="document.getElementById('open-add-folder').click()">+フォルダ新規作成</button>
             <div class="shortcut-box">
+                <% folders.forEach(folder => { %>
+                    <% if(folder) { %>
+                        <div class="folder" onclick="document.getElementById('open-folder-<%= folder._id %>').click()" data-json="<%= JSON.stringify(folder) %>">
+                            <img src="/res/img/folder.png"><br>
+                            <p><%= folder.title %></p>
+                        </div>
+                    <% } %>
+                <% }) %>
                 <% shortcuts.forEach(shortcut => { %>
-                    <% if(shortcut) { %>
-                        <a class="shortcut" href="<%= shortcut.url %>" target="_blank">
-                            <span style="display: none;"><%= JSON.stringify(shortcut) %></span>
+                    <% if(shortcut && shortcut.folder == 'none') { %>
+                        <a class="shortcut" href="<%= shortcut.url %>" target="_blank" data-json="<%= JSON.stringify(shortcut) %>">
                             <img src="<%= shortcut.faviconUrl %>"><br>
                             <p><%= shortcut.title %></p>
                         </a>
@@ -58,6 +65,27 @@
     </div>
 
     <div class="window-box">
+        <% folders.forEach(folder => { %>
+            <% if(folder) { %>
+                <input id="open-folder-<%= folder._id %>" class="open-window" type="checkbox">
+                <div class="window">
+                    <div class="folder-content">
+                        <button class="text-button" onclick="document.getElementById('open-folder-<%= folder._id %>').click()">←　<%= folder.title %></button>
+                        <div class="shortcut-box">
+                            <% shortcuts.forEach(shortcut => { %>
+                                <% if(shortcut && shortcut.folder == folder._id) { %>
+                                    <a class="shortcut" href="<%= shortcut.url %>" target="_blank" data-json="<%= JSON.stringify(shortcut) %>">
+                                        <img src="<%= shortcut.faviconUrl %>"><br>
+                                        <p><%= shortcut.title %></p>
+                                    </a>
+                                <% } %>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        <% }) %>
+
         <input id="open-add-shortcut" class="open-window" type="checkbox">
         <div class="window">
             <div class="window-content">
@@ -69,7 +97,17 @@
                     <div>
                         <input type="url" name="url" placeholder="URL" required>
                     </div>
-                    <div class="flex-left">
+                    <div>
+                        <select name="folder">
+                            <option value="none">フォルダなし</option>
+                            <% folders.forEach(folder => { %>
+                                <% if(folder) { %>
+                                    <option value="<%= folder._id %>"><%= folder.title %></option>
+                                <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="flex-right">
                         <button class="cancel" type="button" onclick="document.getElementById('open-add-shortcut').click()">キャンセル</button>
                         <button type="submit">作成</button>
                     </div>
@@ -88,8 +126,50 @@
                     <div>
                         <input id="edit-shortcut-url" type="url" name="url" placeholder="URL" required>
                     </div>
-                    <div class="flex-left">
+                    <div>
+                        <select id="edit-shortcut-folder" name="folder">
+                            <option value="none">フォルダなし</option>
+                            <% folders.forEach(folder => { %>
+                                <% if(folder) { %>
+                                    <option value="<%= folder._id %>"><%= folder.title %></option>
+                                <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="flex-right">
                         <button class="cancel" type="button" onclick="document.getElementById('open-edit-shortcut').click()">キャンセル</button>
+                        <button type="submit">更新</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <input id="open-add-folder" class="open-window" type="checkbox">
+        <div class="window">
+            <div class="window-content">
+                <h2>フォルダを作成</h2>
+                <form action="/folder/add" method="post">
+                    <div>
+                        <input type="text" name="title" placeholder="タイトル" value="新しいフォルダ" required>
+                    </div>
+                    <div class="flex-right">
+                        <button class="cancel" type="button" onclick="document.getElementById('open-add-folder').click()">キャンセル</button>
+                        <button type="submit">作成</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <input id="open-edit-folder" class="open-window" type="checkbox">
+        <div class="window">
+            <div class="window-content">
+                <h2>フォルダを編集</h2>
+                <form id="edit-folder-form" method="post">
+                    <div>
+                        <input id="edit-folder-title" type="text" name="title" placeholder="タイトル" required>
+                    </div>
+                    <div class="flex-right">
+                        <button class="cancel" type="button" onclick="document.getElementById('open-edit-folder').click()">キャンセル</button>
                         <button type="submit">更新</button>
                     </div>
                 </form>
@@ -102,12 +182,19 @@
             <button onclick="document.getElementById('open-edit-shortcut').click()">編集</button>
             <button onclick="document.getElementById('delete-shortcut').submit()">削除</button>
         </div>
+
+        <div id="folder-contextmenu" class="contextmenu">
+            <button onclick="document.getElementById('open-edit-folder').click()">編集</button>
+            <button onclick="document.getElementById('delete-folder').submit()">削除</button>
+        </div>
     </div>
 
     <div style="display: none;">
-        <span id="current-shortcut"></span>
+        <div id="current-shortcut" data-json=""></div>
+        <div id="current-folder" data-json=""></div>
 
         <form id="delete-shortcut" method="post"></form>
+        <form id="delete-folder" method="post"></form>
     </div>
 
     <script src="/js/desktop.js"></script>
