@@ -6,6 +6,7 @@ const passport = require('passport')
 const flash = require('connect-flash')
 const path = require('path')
 const bodyParser = require('body-parser')
+const favicon = require('serve-favicon')
 
 const authRoutes = require('./routes/auth')
 const indexRoutes = require('./routes/index')
@@ -37,6 +38,9 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error')
     next()
 })
+
+app.use(favicon(path.join(__dirname, 'public', 'res', 'img', 'favicon.ico')))
+console.log(path.join(__dirname, 'public', 'res', 'img', 'favicon.ico'))
 
 app.use('/', indexRoutes)
 app.use('/auth', authRoutes)

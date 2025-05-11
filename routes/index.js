@@ -108,6 +108,7 @@ router.post('/folder/edit/:id', authMiddleware, async(req, res) => {
 router.post('/folder/delete/:id', authMiddleware, async(req, res) => {
     try {
         await Folder.findOneAndDelete({ _id: req.params.id })
+        await Shortcut.deleteMany({ folder: req.params.id })
         req.flash('success_msg', 'フォルダを削除しました')
         res.redirect('/desktop')
     }
